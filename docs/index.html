@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Application Tracker</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f6fa; color: #2f3640; padding: 24px; }
+h1 { font-size: 1.5rem; font-weight: 600; margin-bottom: 20px; }
+.summary { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+.card { background: #fff; border: 1px solid #dcdde1; border-radius: 6px; padding: 16px 24px; min-width: 120px; text-align: center; }
+.card .number { font-size: 1.8rem; font-weight: 700; }
+.card .label { font-size: 0.8rem; color: #718093; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.controls { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.controls select, .controls input { padding: 8px 12px; border: 1px solid #dcdde1; border-radius: 4px; font-size: 0.9rem; background: #fff; }
+.controls input { min-width: 240px; }
+.table-wrap { overflow-x: auto; background: #fff; border: 1px solid #dcdde1; border-radius: 6px; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+thead th { background: #2f3640; color: #fff; padding: 10px 12px; text-align: left; cursor: pointer; user-select: none; white-space: nowrap; position: sticky; top: 0; }
+thead th:hover { background: #353b48; }
+tbody td { padding: 8px 12px; border-top: 1px solid #eee; max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+tbody tr:hover { opacity: 0.85; }
+a { color: inherit; }
+footer { margin-top: 24px; font-size: 0.75rem; color: #718093; text-align: center; }
+</style>
+</head>
+<body>
+<h1>Job Application Tracker</h1>
+
+<div class="summary">
+  <div class="card"><div class="number">99</div><div class="label">Total</div></div>
+  <div class="card"><div class="number">36</div><div class="label">Applied</div></div>
+  <div class="card"><div class="number">50</div><div class="label">In Review</div></div>
+  <div class="card"><div class="number">3</div><div class="label">Interview</div></div>
+  <div class="card"><div class="number">0</div><div class="label">Offers</div></div>
+  <div class="card"><div class="number">10</div><div class="label">Rejected</div></div>
+</div>
+
+<div class="controls">
+  <select id="statusFilter">
+    <option value="">All Statuses</option>
+    <option>Applied</option>
+    <option>Acknowledged</option>
+    <option>In Review</option>
+    <option>Assessment</option>
+    <option>Interview Scheduled</option>
+    <option>Offer</option>
+    <option>Rejected</option>
+    <option>Withdrawn</option>
+    <option>Unknown</option>
+  </select>
+  <input type="text" id="searchBox" placeholder="Search by company or job title...">
+</div>
+
+<div class="table-wrap">
+  <table id="appTable">
+    <thead>
+      <tr>
+        <th data-col="0">Company</th>
+        <th data-col="1">Job Title</th>
+        <th data-col="2">Salary Range</th>
+        <th data-col="3">Application Link</th>
+        <th data-col="4">Job Description</th>
+        <th data-col="5">Applied Date</th>
+        <th data-col="6">Email</th>
+        <th data-col="7">Status</th>
+        <th data-col="8">Interview Date</th>
+        <th data-col="9">Last Updated</th>
+        <th data-col="10">Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Indeed (unspecified employer)</td><td>Territory Technical Sales Representative</td><td></td><td></td><td>Territory technical sales representative role. Application submitted via Indeed.</td><td>2026-03-24</td><td>indeedapply@indeed.com</td><td>Applied</td><td></td><td>2026-03-25 10:06 UTC</td><td>Applied via Indeed</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>MEDFAR Clinical Solutions</td><td>Customer Onboarding Specialist - Ontario</td><td></td><td><a href="https://jobs.smartrecruiters.com/my-applications/Medfar/48505b38-1dd9-4971-8d5f-f3fa7ec6312a" target="_blank">Link</a></td><td>Customer onboarding specialist role at MEDFAR, a clinical solutions company. Application under review.</td><td>2026-03-23</td><td>notification@smartrecruiters.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:06 UTC</td><td>Confirmation received from Medfar via SmartRecruiters</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Safe Software</td><td>Customer Solutions Specialist II</td><td></td><td></td><td>Customer solutions specialist role at Safe Software. Team reviews applications within 7-10 days.</td><td>2026-03-23</td><td>no-reply@ashbyhq.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:06 UTC</td><td>Application received; review within 7-10 days</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="In Review"><td>Foresters Financial</td><td>Service Center Representative</td><td></td><td></td><td>Service Center Representative (R-2185) at Foresters Financial. Experience and qualifications under review.</td><td>2026-03-23</td><td>foresters@myworkday.com</td><td>In Review</td><td></td><td>2026-03-25 10:06 UTC</td><td>Ref: R-2185; reviewing experience and qualifications</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Safe Software</td><td>Technical Support Specialist II - FME Flow</td><td></td><td></td><td>Technical support specialist for FME Flow at Safe Software. Team reviews applications within 7-10 days.</td><td>2026-03-23</td><td>no-reply@ashbyhq.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:06 UTC</td><td>Application received; review within 7-10 days</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>AutoCanada</td><td>Employment (unspecified role)</td><td></td><td><a href="https://www.autocan.ca/careers/" target="_blank">Link</a></td><td>General employment application at AutoCanada. Reviewing applications; only selected candidates contacted.</td><td>2026-03-23</td><td>AutoCanadaInc.hr@adp.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:06 UTC</td><td>Automated ADP response; only selected candidates will be contacted</td></tr>
+      <tr style="background-color:#FFC7CE;color:#9C0006" data-status="Rejected"><td>PBS Systems</td><td>Data Analyst</td><td></td><td></td><td>Data analyst position at PBS Systems. Position has been filled.</td><td></td><td>michelles@pbssystems.com</td><td>Rejected</td><td></td><td>2026-03-25 10:06 UTC</td><td>Position filled; not moving forward</td></tr>
+      <tr style="background-color:#FFC7CE;color:#9C0006" data-status="Rejected"><td>Caltrax Inc</td><td>Customer Service Railcar Estimator</td><td></td><td></td><td>Customer service railcar estimator position at Caltrax Inc. Application not selected.</td><td>2026-03-16</td><td>noreply@indeed.com</td><td>Rejected</td><td></td><td>2026-03-25 10:06 UTC</td><td>Caltrax moved to next step; application not selected</td></tr>
+      <tr style="background-color:#FFC7CE;color:#9C0006" data-status="Rejected"><td>Concentrix</td><td>Customer Service / Tech Support Rep - Tech Products (Remote)</td><td></td><td><a href="https://reimagineyourcareer.net" target="_blank">Link</a></td><td>Remote customer service and tech support representative role for tech products at Concentrix.</td><td></td><td>canada+35V44QL5PG@careers.concentrix.com</td><td>Rejected</td><td></td><td>2026-03-25 10:06 UTC</td><td>Not moving forward; encouraged to reapply</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Mindwire Systems Ltd</td><td>Data Analyst</td><td></td><td><a href="https://www.linkedin.com/jobs/view/4385269551/" target="_blank">Link</a></td><td>Data analyst role at Mindwire Systems Ltd in Calgary, AB. Applied via LinkedIn.</td><td>2026-03-17</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:06 UTC</td><td>Applied via LinkedIn</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Indeed (unspecified employer)</td><td>Receptionist/Administrator &amp; Data Entry Specialist</td><td></td><td></td><td>Receptionist, administrator, and data entry specialist role. Applied via Indeed.</td><td>2026-03-17</td><td>indeedapply@indeed.com</td><td>Applied</td><td></td><td>2026-03-25 10:06 UTC</td><td>Applied via Indeed</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Indeed (unspecified employer)</td><td>Technical Support Representative</td><td></td><td></td><td>Technical support representative role. Applied via Indeed.</td><td>2026-03-17</td><td>indeedapply@indeed.com</td><td>Applied</td><td></td><td>2026-03-25 10:06 UTC</td><td>Applied via Indeed</td></tr>
+      <tr style="background-color:#FFC7CE;color:#9C0006" data-status="Rejected"><td>Helic Consultancy</td><td>Data Analyst</td><td></td><td></td><td>Data analyst role at Helic Consultancy (Helic &amp; Co.). Not among top candidates for interviews.</td><td>2026-03-16</td><td>stacy@helicandco.com</td><td>Rejected</td><td></td><td>2026-03-25 10:06 UTC</td><td>Did not place among top candidates; career consultancy referral offered</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>MEDFAR Clinical Solutions</td><td>Customer Onboarding Specialist - Ontario (LinkedIn)</td><td></td><td><a href="https://www.linkedin.com/jobs/view/4386684784/" target="_blank">Link</a></td><td>Customer onboarding specialist role at MEDFAR in Ottawa, ON. Applied via LinkedIn.</td><td>2026-03-23</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:06 UTC</td><td>LinkedIn application confirmation; see also Medfar direct acknowledgment</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Indeed (unspecified employer)</td><td>Junior Systems Software Analyst</td><td></td><td></td><td>Junior systems software analyst role. Applied via Indeed.</td><td>2026-03-16</td><td>indeedapply@indeed.com</td><td>Applied</td><td></td><td>2026-03-25 10:13 UTC</td><td>Applied via Indeed</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Indeed (unspecified employer)</td><td>Technical Support Representative Inside Helpdesk</td><td></td><td></td><td>Technical support representative inside helpdesk role. Applied via Indeed.</td><td>2026-03-16</td><td>indeedapply@indeed.com</td><td>Applied</td><td></td><td>2026-03-25 10:13 UTC</td><td>Applied via Indeed</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>MNP</td><td>Human Capital Data Advisor</td><td></td><td></td><td>Human capital data advisor role at MNP. Application received.</td><td>2026-03-16</td><td>no-reply-careers@mnp.ca</td><td>Acknowledged</td><td></td><td>2026-03-25 10:13 UTC</td><td>Application confirmed by MNP</td></tr>
+      <tr style="background-color:#FFC7CE;color:#9C0006" data-status="Rejected"><td>BDO Canada LLP</td><td>Unknown (BDO role)</td><td></td><td></td><td>Role at BDO Canada LLP. Not moving forward to next stage of hiring.</td><td></td><td>bdo-noreply@bdo.ca</td><td>Rejected</td><td></td><td>2026-03-25 10:13 UTC</td><td>Strong response to posting; not selected</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>PeopleToGo Inc.</td><td>Service Desk Analyst</td><td></td><td></td><td>Service desk analyst role at PeopleToGo Inc. Applied via LinkedIn.</td><td>2026-03-11</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:13 UTC</td><td>Applied via LinkedIn</td></tr>
+      <tr style="background-color:#FFC7CE;color:#9C0006" data-status="Rejected"><td>Stan Darling Insurance Inc.</td><td>Insurance - Technical Service Representative</td><td></td><td></td><td>Insurance technical service representative at Stan Darling Insurance. Not selected.</td><td></td><td>noreply@indeed.com</td><td>Rejected</td><td></td><td>2026-03-25 10:13 UTC</td><td>Moved to next step without applicant</td></tr>
+      <tr style="background-color:#FFEB9C;color:#9C5700" data-status="Assessment"><td>Concentrix</td><td>Customer Service / Tech Support Rep (Remote)</td><td></td><td></td><td>Skills assessment requested as next step in Concentrix hiring process.</td><td></td><td>canada+35V44QL5PG@careers.concentrix.com</td><td>Assessment</td><td></td><td>2026-03-25 10:13 UTC</td><td>Baseline skills assessment requested</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Crossing Hurdles</td><td>Unknown (Crossing Hurdles role)</td><td></td><td></td><td>Application sent to Crossing Hurdles via LinkedIn.</td><td>2026-03-05</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:13 UTC</td><td>Applied via LinkedIn</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Precision Technologies</td><td>Unknown (Precision Technologies role)</td><td></td><td></td><td>Application sent to Precision Technologies via LinkedIn.</td><td>2026-03-04</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:13 UTC</td><td>Applied via LinkedIn</td></tr>
+      <tr style="background-color:#FFC7CE;color:#9C0006" data-status="Rejected"><td>PBS Systems</td><td>Customer Insights Data Analyst</td><td></td><td></td><td>Customer insights data analyst at PBS Systems. Position filled.</td><td></td><td>careers@pbssystems.com</td><td>Rejected</td><td></td><td>2026-03-25 10:13 UTC</td><td>Position filled; not moving forward</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Pengcorp Ltd.</td><td>Unknown (Pengcorp role)</td><td></td><td></td><td>Application sent to Pengcorp Ltd. via LinkedIn.</td><td>2026-03-04</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:13 UTC</td><td>Applied via LinkedIn</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>TowardJobs</td><td>Work From Home Customer Service Representative - Part Time</td><td></td><td></td><td>WFH part-time customer service representative role at TowardJobs. Applied via Lever.</td><td>2026-02-22</td><td>no-reply@hire.lever.co</td><td>Acknowledged</td><td></td><td>2026-03-25 10:13 UTC</td><td>Applied via Lever</td></tr>
+      <tr style="background-color:#FFC7CE;color:#9C0006" data-status="Rejected"><td>Hive.co</td><td>Data Analyst</td><td></td><td></td><td>Data analyst role at Hive.co. Moving forward with other candidates.</td><td></td><td>recruitment@hive.co</td><td>Rejected</td><td></td><td>2026-03-25 10:13 UTC</td><td>Not selected; moving forward with others</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Keyera</td><td>Business Development Analyst (Oil Sands)</td><td></td><td></td><td>Business development analyst for oil sands at Keyera. Application under review.</td><td>2026-03-03</td><td>keyera@myworkday.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:13 UTC</td><td>Application received via Workday</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Wiehler Mechanical</td><td>Customer Service Representative</td><td></td><td></td><td>Customer service representative role at Wiehler Mechanical.</td><td>2026-03-03</td><td>no-reply@us.greenhouse-mail.io</td><td>Acknowledged</td><td></td><td>2026-03-25 10:13 UTC</td><td>Application received via Greenhouse</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Adecco</td><td>Business Solutions Analyst</td><td></td><td></td><td>Business solutions analyst role at Adecco. Applied via LinkedIn.</td><td>2026-03-02</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:13 UTC</td><td>Applied via LinkedIn</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Kelly</td><td>Senior Business Analyst</td><td></td><td></td><td>Senior business analyst role at Kelly. Applied via LinkedIn.</td><td>2026-03-01</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:13 UTC</td><td>Applied via LinkedIn</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Maplesoft Group (SEB Company)</td><td>Service Desk Analyst</td><td></td><td></td><td>Service desk analyst role at Maplesoft Group. Applied via LinkedIn.</td><td>2026-02-28</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:13 UTC</td><td>Applied via LinkedIn</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>CQ Search Group Ltd.</td><td>Technical Support Specialist</td><td></td><td></td><td>Technical support specialist role at CQ Search Group Ltd. Applied via LinkedIn.</td><td>2026-02-28</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:13 UTC</td><td>Applied via LinkedIn</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Adecco</td><td>Unknown (Adecco role via LinkedIn)</td><td></td><td></td><td>Application sent to Adecco via LinkedIn.</td><td>2026-02-27</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:13 UTC</td><td>Applied via LinkedIn</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>PBS Systems</td><td>Data Analyst (Dayforce)</td><td></td><td></td><td>Data analyst position at PBS Systems. Application received via Dayforce.</td><td>2026-02-26</td><td>notify@dayforce.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:13 UTC</td><td>High volume of applications; only selected candidates contacted</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Tudotsu</td><td>Unknown (Tudotsu role)</td><td></td><td></td><td>Application sent to Tudotsu via LinkedIn.</td><td>2026-02-26</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:13 UTC</td><td>Applied via LinkedIn</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Enbridge</td><td>Analyst, Commercial Business Applications</td><td></td><td></td><td>Analyst, commercial business applications (position 70466) at Enbridge.</td><td>2026-02-26</td><td>enbridge@myworkday.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:13 UTC</td><td>Ref: 70466; application received via Workday</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Kelly</td><td>Unknown (Kelly role via LinkedIn)</td><td></td><td></td><td>Application sent to Kelly via LinkedIn.</td><td>2026-02-26</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:13 UTC</td><td>Applied via LinkedIn</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="In Review"><td>Pearl Recruitment</td><td>Unknown (Pearl Recruitment role)</td><td></td><td></td><td>Application viewed by Pearl Recruitment via LinkedIn.</td><td></td><td>jobs-noreply@linkedin.com</td><td>In Review</td><td></td><td>2026-03-25 10:13 UTC</td><td>Application viewed by recruiter</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Caltrax Inc</td><td>Customer Service Railcar Estimator (Indeed Apply)</td><td></td><td></td><td>Customer service railcar estimator. Originally applied via Indeed.</td><td>2026-03-16</td><td>indeedapply@indeed.com</td><td>Applied</td><td></td><td>2026-03-25 10:13 UTC</td><td>Applied via Indeed; later rejected by Caltrax</td></tr>
+      <tr style="background-color:#FFEB9C;color:#9C5700" data-status="Assessment"><td>CBI Home Health</td><td>Care Access Representative - Calgary</td><td></td><td></td><td>Care Access Representative role at CBI Home Health, patient care coordination.</td><td>2026-02-17</td><td>no-reply@cbi.ca</td><td>Assessment</td><td></td><td>2026-03-25 10:25 UTC</td><td>Assessment screening required</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Long View Systems</td><td>IT/Business Analyst</td><td></td><td></td><td>IT/Business Analyst role at Long View Systems managed IT services.</td><td>2026-02-17</td><td>no-reply@hire.lever.co</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Lever application confirmed</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Enverus</td><td>Application Support Analyst - 2610</td><td></td><td></td><td>Application Support Analyst at Enverus, energy data analytics company.</td><td>2026-02-17</td><td>notification@jobvite.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Talent Team reviewing application</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Messer</td><td>Customer Care Representative</td><td></td><td></td><td>Customer Care Representative at Messer industrial gases company.</td><td>2026-02-17</td><td>noreply@ultipro.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Application received, will contact if matched</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Clio</td><td>Business/Data Analyst</td><td></td><td></td><td>Analyst role at Clio legal tech software company.</td><td>2026-02-17</td><td>clio@myworkday.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Workday application acknowledged by Talent Team</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Westlake</td><td>Customer Service Representative - Contract</td><td></td><td></td><td>Contract CSR role at Westlake chemical manufacturer.</td><td>2026-02-17</td><td>westlake@myworkday.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Workday application received</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Crossover / Alpha</td><td>Technical Support Engineer</td><td></td><td></td><td>Technical Support Engineer at Alpha via Crossover platform.</td><td>2026-02-16</td><td>welcome@crossover.com</td><td>Applied</td><td></td><td>2026-03-25 10:25 UTC</td><td>Applied via Crossover remote platform</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>MNP</td><td>Data Analyst (Term)</td><td></td><td></td><td>Term Data Analyst at MNP professional services firm.</td><td>2026-02-12</td><td>no-reply-careers@mnp.ca</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Application received, selected candidates contacted</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Canadian Tire</td><td>Junior Analyst</td><td></td><td></td><td>Junior Analyst at Canadian Tire Group of Companies.</td><td>2026-02-12</td><td>canadiantirecorporation@myworkday.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Workday application received</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Western Financial Group</td><td>Analyst - AI Business</td><td></td><td></td><td>AI Business Analyst at Western Financial Group, remote.</td><td>2026-02-19</td><td>system@successfactors.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>SuccessFactors confirmed, remote WFH</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>MNP</td><td>Data Developer</td><td></td><td></td><td>Data Developer opportunity at MNP professional services.</td><td>2026-02-19</td><td>no-reply-careers@mnp.ca</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Application received</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Pearl Recruitment</td><td>Business/Data Analyst</td><td></td><td></td><td>Analyst role via Pearl Recruitment staffing agency.</td><td>2026-02-19</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:25 UTC</td><td>LinkedIn Easy Apply</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Graham Management Services</td><td>Junior FP&amp;A Analyst</td><td></td><td></td><td>Junior FP&amp;A Analyst role at Graham Management Services LP.</td><td>2026-02-19</td><td>noreply@construction-benefits.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Job #30345 confirmed</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Robert Half</td><td>Business/Data Analyst</td><td></td><td></td><td>Analyst role via Robert Half staffing firm.</td><td>2026-02-19</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:25 UTC</td><td>LinkedIn Easy Apply</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Inter Pipeline</td><td>Scheduling Analyst</td><td></td><td></td><td>Scheduling Analyst at Inter Pipeline Ltd.</td><td>2026-02-19</td><td>careers@interpipeline.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Application confirmed, track in candidate profile</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Hays</td><td>Junior Business Analyst</td><td></td><td></td><td>Junior Business Analyst via Hays recruitment.</td><td>2026-02-19</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:25 UTC</td><td>LinkedIn Easy Apply via Hays</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Alberta Health Services</td><td>IT Analyst II - ALB00546259</td><td></td><td></td><td>IT Analyst II with Alberta Health Services.</td><td>2026-02-18</td><td>hr-albertahs@recruithealthab.ca</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Applications shortlisted</td></tr>
+      <tr style="background-color:#FFEB9C;color:#9C5700" data-status="Assessment"><td>Procom</td><td>Technology and Data Analyst</td><td></td><td></td><td>Technology and Data Analyst contract at Procom IT staffing.</td><td>2026-02-18</td><td>virtualrecruiter@procomservices.com</td><td>Assessment</td><td></td><td>2026-03-25 10:25 UTC</td><td>Virtual recruiter next steps requested</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Strathcona Resources</td><td>Data Analyst</td><td></td><td></td><td>Data Analyst at Strathcona Resources oil sands company.</td><td>2026-02-18</td><td>strathconaresources@myworkday.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Workday application received</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>ARC Resources</td><td>Data Analyst (12-month contract)</td><td></td><td></td><td>12-month contract Data Analyst at ARC Resources Ltd.</td><td>2026-02-18</td><td>system@successfactors.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Application being processed</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>emergiTEL</td><td>Data Analyst - 2026-14</td><td></td><td></td><td>Data Analyst at emergiTEL telecommunications.</td><td>2026-02-18</td><td>sandra.li@emergitel.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Recruit-bot acknowledged</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>PBS Systems</td><td>Customer Insights Data Analyst</td><td></td><td></td><td>Customer Insights Data Analyst at PBS Systems automotive software.</td><td>2026-02-18</td><td>notify@dayforce.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>High volume - will be in touch</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Cellar Insights</td><td>Data Analyst</td><td></td><td></td><td>Data Analyst at Cellar Insights wine intelligence.</td><td>2026-02-18</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:25 UTC</td><td>LinkedIn Easy Apply</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>BMO</td><td>Credit Analyst, Commercial Banking (Business Property Finance)</td><td></td><td></td><td>Credit Analyst in Commercial Banking at Bank of Montreal.</td><td>2026-02-18</td><td>hr.notifications@bmo.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>R260004691 - dedicated to great customer experiences</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>BDO Canada</td><td>Business/Data Analyst</td><td></td><td></td><td>Analyst role at BDO Canada LLP professional services.</td><td>2026-01-15</td><td>bdo-noreply@bdo.ca</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Talent Acquisition team reviewing</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>CLEAResult</td><td>Operations Analyst</td><td></td><td></td><td>Operations Analyst at CLEAResult energy efficiency consulting.</td><td>2026-02-24</td><td>clearesult@myworkday.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Candidacy being reviewed by Talent Team</td></tr>
+      <tr style="background-color:#FFC7CE;color:#9C0006" data-status="Rejected"><td>CLEAResult</td><td>Operations Analyst</td><td></td><td></td><td>Operations Analyst at CLEAResult - not progressed.</td><td>2026-02-25</td><td>clearesult@myworkday.com</td><td>Rejected</td><td></td><td>2026-03-25 10:25 UTC</td><td>Regret - another candidate selected</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Alberta Health Services</td><td>IT Analyst II - ALB00546152</td><td></td><td></td><td>IT Analyst II second application with Alberta Health Services.</td><td>2026-02-24</td><td>hr-albertahs@recruithealthab.ca</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Applications shortlisted</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>BGIS</td><td>Business Analyst (Contract) - 229040</td><td></td><td></td><td>Contract Business Analyst at BGIS global facility management.</td><td>2026-02-24</td><td>careers@bgis.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Resume under review, will contact if matched</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Airswift</td><td>Business/Data Analyst</td><td></td><td></td><td>Analyst role via Airswift energy &amp; engineering staffing.</td><td>2026-02-24</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:25 UTC</td><td>LinkedIn Easy Apply</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Pengcorp</td><td>Business/Data Analyst</td><td></td><td></td><td>Analyst role via Pengcorp Ltd.</td><td>2026-02-24</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:25 UTC</td><td>LinkedIn Easy Apply</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Quarry Consulting</td><td>Business/Data Analyst</td><td></td><td></td><td>Analyst role via Quarry Consulting recruitment.</td><td>2026-02-24</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:25 UTC</td><td>LinkedIn Easy Apply</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Bridgewater Bank</td><td>Business/Data Analyst</td><td></td><td></td><td>Analyst role at Bridgewater Bank.</td><td>2026-02-25</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:25 UTC</td><td>LinkedIn Easy Apply</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Hive.co</td><td>Data Analyst</td><td></td><td></td><td>Data Analyst at Hive.co email marketing platform.</td><td>2026-02-25</td><td>no-reply@ashbyhq.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Team excited to review application</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Scotiabank</td><td>Customer Experience Associate - Panorama Hills</td><td></td><td></td><td>33.75 hrs/week Customer Experience Associate at Scotiabank Panorama Hills.</td><td>2026-02-25</td><td>me@me.scotiabank.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Looking forward to reviewing application</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Westlake</td><td>Customer Service Representative - Contract</td><td></td><td></td><td>Contract CSR at Westlake - second application.</td><td>2026-02-25</td><td>westlake@myworkday.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Second application - Workday confirmed</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Cool-It Systems</td><td>Customer Success &amp; Operations Associate</td><td></td><td></td><td>Customer Success &amp; Ops Associate at Cool-It Systems liquid cooling tech.</td><td>2026-02-25</td><td>no-reply@coolitsystems.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Will contact if resume matches</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Maplesoft Group (SEB)</td><td>Business/Data Analyst</td><td></td><td></td><td>Analyst role at Maplesoft Group, an SEB Company.</td><td>2026-02-25</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:25 UTC</td><td>LinkedIn Easy Apply</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>CQ Search Group</td><td>Business/Data Analyst</td><td></td><td></td><td>Analyst role via CQ Search Group Ltd.</td><td>2026-02-25</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:25 UTC</td><td>LinkedIn Easy Apply</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>PeopleToGo</td><td>Business/Data Analyst</td><td></td><td></td><td>Analyst role via PeopleToGo IT staffing.</td><td>2026-02-25</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:25 UTC</td><td>LinkedIn Easy Apply</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Aplin</td><td>Business/Data Analyst</td><td></td><td></td><td>Analyst role via Aplin recruitment agency.</td><td>2026-02-25</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:25 UTC</td><td>LinkedIn Easy Apply</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>HUB International</td><td>Analyst, Health &amp; Benefits Consulting</td><td></td><td></td><td>Health &amp; Benefits Analyst at HUB International insurance brokerage.</td><td>2026-02-25</td><td>hubinternational@myworkday.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Workday - careful consideration</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Strathcona Resources</td><td>Data Analyst</td><td></td><td></td><td>Data Analyst at Strathcona Resources (second application).</td><td>2026-02-25</td><td>strathconaresources@myworkday.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>High volume - second application</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Keyera</td><td>Business Development Analyst (Oil Sands)</td><td></td><td></td><td>Business Development Analyst (Oil Sands) at Keyera energy infrastructure.</td><td>2026-02-25</td><td>keyera@myworkday.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>All applications carefully reviewed</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Agilus Work Solutions</td><td>Business Solutions Analyst - 153330</td><td></td><td></td><td>Business Solutions Analyst contract role at Agilus Work Solutions.</td><td>2026-02-25</td><td>noreply@agilus.ca</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Will be in touch within 2 weeks if matched</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Prairie Payments Joint Venture</td><td>Business/Data Analyst</td><td></td><td></td><td>Analyst at Prairie Payments Joint Venture fintech.</td><td>2026-02-25</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:25 UTC</td><td>LinkedIn Easy Apply</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Spartan Delta Corp</td><td>Business/Data Analyst</td><td></td><td></td><td>Analyst at Spartan Delta Corp oil and gas.</td><td>2026-02-25</td><td>jobs-noreply@linkedin.com</td><td>Applied</td><td></td><td>2026-03-25 10:25 UTC</td><td>LinkedIn Easy Apply</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Co-operators (CGIC)</td><td>Business Analyst</td><td></td><td></td><td>Business Analyst at Co-operators General Insurance Company.</td><td>2026-02-26</td><td>no-reply@ultipro.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:25 UTC</td><td>Thrilled to receive application</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Calgary Stampede</td><td>POS Support Technician - Seasonal</td><td></td><td></td><td>Seasonal POS Support Technician at Calgary Exhibition &amp; Stampede.</td><td>2026-02-20</td><td>csrecruiting@calgarystampede.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:26 UTC</td><td>Resume will be reviewed, will be contacted if selected</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Clearbridge Business Solutions</td><td>Tier 1 Technician (In-Office)</td><td></td><td></td><td>Tier 1 Technician in-office role at Clearbridge Business Solutions.</td><td>2026-02-20</td><td>notifications@app.bamboohr.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:26 UTC</td><td>BambooHR application confirmed</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>myHSA</td><td>Customer Support Representative</td><td></td><td></td><td>Customer Support Representative at myHSA health spending account platform.</td><td>2026-02-20</td><td>notifications@app.bamboohr.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:26 UTC</td><td>BambooHR application confirmed</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Cascades</td><td>Technical Representative</td><td></td><td></td><td>Technical Representative at Cascades packaging and tissue products company.</td><td>2026-02-20</td><td>system@successfactors.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:26 UTC</td><td>SuccessFactors application received</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Cold Bore Technology</td><td>Technical Support Operator</td><td></td><td></td><td>Technical Support Operator at Cold Bore Technology, oil &amp; gas data solutions.</td><td>2026-02-21</td><td>support@ziprecruiter.com</td><td>Applied</td><td></td><td>2026-03-25 10:26 UTC</td><td>ZipRecruiter - email verification required</td></tr>
+      <tr style="background-color:#FFFFFF;color:#333333" data-status="Applied"><td>Randstad Canada</td><td>Customer Service Representative - Evening Shift</td><td></td><td></td><td>CSR evening shift contract role via Randstad Canada staffing.</td><td>2026-02-22</td><td>no-reply@randstadservices.com</td><td>Applied</td><td></td><td>2026-03-25 10:26 UTC</td><td>Application confirmed via Randstad</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="In Review"><td>Hays</td><td>Business Analyst (Junior)</td><td></td><td></td><td>Junior Business Analyst role via Hays recruitment, application reviewed.</td><td>2026-02-22</td><td>jobs-noreply@linkedin.com</td><td>In Review</td><td></td><td>2026-03-25 10:26 UTC</td><td>LinkedIn - application viewed by Hays</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="In Review"><td>Cellar Insights</td><td>Data Analyst</td><td></td><td></td><td>Data Analyst at Cellar Insights - application viewed by recruiter.</td><td>2026-02-23</td><td>jobs-noreply@linkedin.com</td><td>In Review</td><td></td><td>2026-03-25 10:26 UTC</td><td>LinkedIn - application viewed by Cellar Insights</td></tr>
+      <tr style="background-color:#FFC7CE;color:#9C0006" data-status="Rejected"><td>Helic &amp; Co.</td><td>Data Analyst</td><td></td><td></td><td>Data Analyst role at Helic Consultancy.</td><td>2026-03-16</td><td>stacy@helicandco.com</td><td>Rejected</td><td></td><td>2026-03-25 10:27 UTC</td><td>Did not place among top candidates for interviews</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>Cossette Media</td><td>Data Analyst</td><td></td><td></td><td>Data Analyst position at Cossette Media advertising agency.</td><td>2026-03-16</td><td>no-reply@talentpoolbuilder.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:27 UTC</td><td>Acknowledge, await response</td></tr>
+      <tr style="background-color:#DDEBF7;color:#184F7D" data-status="Acknowledged"><td>7shifts</td><td>Customer Support Representative</td><td></td><td></td><td>Customer Support Representative at 7shifts restaurant scheduling software.</td><td>2026-03-23</td><td>no-reply@7shifts.com</td><td>Acknowledged</td><td></td><td>2026-03-25 10:27 UTC</td><td>Application confirmed, hiring process details provided</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<footer>Last synced: 2026-03-25 10:27 UTC</footer>
+
+<script>
+(function() {
+  var table = document.getElementById("appTable");
+  var tbody = table.querySelector("tbody");
+  var headers = table.querySelectorAll("thead th");
+  var statusFilter = document.getElementById("statusFilter");
+  var searchBox = document.getElementById("searchBox");
+  var sortDir = {};
+
+  headers.forEach(function(th) {
+    th.addEventListener("click", function() {
+      var col = parseInt(th.dataset.col);
+      sortDir[col] = !sortDir[col];
+      var rows = Array.from(tbody.querySelectorAll("tr"));
+      rows.sort(function(a, b) {
+        var aVal = a.children[col].textContent.trim().toLowerCase();
+        var bVal = b.children[col].textContent.trim().toLowerCase();
+        if (aVal < bVal) return sortDir[col] ? -1 : 1;
+        if (aVal > bVal) return sortDir[col] ? 1 : -1;
+        return 0;
+      });
+      rows.forEach(function(r) { tbody.appendChild(r); });
+    });
+  });
+
+  function filterRows() {
+    var status = statusFilter.value.toLowerCase();
+    var search = searchBox.value.toLowerCase();
+    var rows = tbody.querySelectorAll("tr");
+    rows.forEach(function(r) {
+      var rowStatus = (r.dataset.status || "").toLowerCase();
+      var company = r.children[0].textContent.toLowerCase();
+      var title = r.children[1].textContent.toLowerCase();
+      var matchStatus = !status || rowStatus === status;
+      var matchSearch = !search || company.indexOf(search) !== -1 || title.indexOf(search) !== -1;
+      r.style.display = (matchStatus && matchSearch) ? "" : "none";
+    });
+  }
+
+  statusFilter.addEventListener("change", filterRows);
+  searchBox.addEventListener("input", filterRows);
+})();
+</script>
+</body>
+</html>
